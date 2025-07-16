@@ -30,6 +30,8 @@ def parse_args():
     parser.add_argument("--input-file", type=str, help="Path to input file for predefined text modes")
     parser.add_argument("--text-color", type=str, default="#000000", help="Text color (in hex)")
     parser.add_argument("--bg-color", type=str, default="#ffffff",help="Image background color (in hex)")
+    parser.add_argument("--outline-thickness", type=int, default=0, help="Thickness of the outline around text (0 = no outline)")
+    parser.add_argument("--outline-color", type=str, default="#000000",help="Outline color in HEX format")
 
     return parser.parse_args()
 
@@ -54,7 +56,6 @@ if __name__ == "__main__":
         print("--input-file is required when --text-mode is DEFINED_LIST or DEFINED_LIST_RANDOM")
         exit(1)
 
-
     DATA_COUNT = args.data_count
     TEST_FONT = args.test_font
     FONT_SIZE = args.font_size
@@ -70,10 +71,12 @@ if __name__ == "__main__":
     TEXT_MODE = args.text_mode
     BG_COLOR = args.bg_color
     TEXT_COLOR = args.text_color
+    OUTLINE_THICKNESS = args.outline_thickness
+    OUTLINE_COLOR = args.outline_color
 
     r = RandomWords()
 
-    print(f"Generating {DATA_COUNT} items using font: {TEST_FONT}, text mode: {TEXT_MODE}")
+    print(f"\nGenerating {DATA_COUNT} items using font: {TEST_FONT}, text mode: {TEXT_MODE}")
 
     if(not os.path.exists(OUTPUT_PATH)):
         os.mkdir(OUTPUT_PATH)
@@ -88,8 +91,13 @@ if __name__ == "__main__":
             font = ImageFont.truetype(TEST_FONT, FONT_SIZE)
         except IOError:
             font = ImageFont.load_default()
+        
+        text = ""
+        for j in range(NUM_WORDS):
+            text += r.get_random_word() + " "
+        
+        text = text.strip()
 
-        text = r.get_random_word()
         match(TEXT_MODE):
         
             case "DEFINED_LIST":
@@ -116,13 +124,26 @@ if __name__ == "__main__":
 
         __,__,width,height = d.textbbox((0,0), text, font=font, align="left")
 
-        img = Image.new('RGB', (width + WIDTH_PADING, height + HEIGHT_PADING), color = BG_COLOR)
+        # Create image with padding and background
+        img = Image.new('RGB', (width + WIDTH_PADING, height + HEIGHT_PADING), color=BG_COLOR)
         d = ImageDraw.Draw(img)
 
-        d.text((BASE_X + BASE_X_PADING, BASE_Y + BASE_Y_PADING), text, fill=TEXT_COLOR, font=font)
+        x = BASE_X + BASE_X_PADING
+        y = BASE_Y + BASE_Y_PADING
+
+        if(OUTLINE_THICKNESS > 0):                                              # Draw outline first (all surrounding pixels)
+            for dx in range(-OUTLINE_THICKNESS, OUTLINE_THICKNESS + 1):
+                for dy in range(-OUTLINE_THICKNESS, OUTLINE_THICKNESS + 1):
+                    if dx != 0 or dy != 0:
+                        d.text((x + dx, y + dy), text, font=font, fill=OUTLINE_COLOR)
+
+        d.text((x, y), text, font=font, fill=TEXT_COLOR)
+
         img.save(f"{OUTPUT_PATH}/generated_data{str(i)}.png")
 
         with open(f"{OUTPUT_PATH}/generated_data{str(i)}.gt.txt", "w") as file:
             file.write(text)
 
-        print(f"Generated Data #{str(i)}")
+        # print(f"Generated Data #{str(i)}")
+
+    print("done")

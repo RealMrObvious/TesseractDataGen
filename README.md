@@ -29,7 +29,7 @@ python main.py --test-font <path to test font> [options]
 | ------------------ | ----- | --------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `--test-font`      | str   | *(required)*    | Path to the `.ttf` font file                                                                                            |
 | `--data-count`     | int   | `1`             | Number of samples to generate                                                                                           |
-| `--num-words`      | int   | `1`             | Number of words generated per image                                                                                     |
+| `--num-words`      | int   | `1`             | Number of words generated per image (**Note:** increasing word count can *significantly* increases generation time)                                                                                     |
 | `--font-size`      | int   | `45`            | Font size in points                                                                                                     |
 | `--height-padding` | float | `5`             | Vertical padding around the text                                                                                        |
 | `--width-padding`  | float | `5`             | Horizontal padding around the text                                                                                      |
@@ -42,6 +42,9 @@ python main.py --test-font <path to test font> [options]
 | `--input-file`     | str   | `None`          | **Required** if using `DEFINED_LIST` or `DEFINED_LIST_RANDOM`. Path to file with source words                           |
 | `--text-color`     | str   | `#000000`       | Text color in HEX format (e.g., `#000000` for black)                                                                    |
 | `--bg-color`       | str   | `#ffffff`       | Background color in HEX format (e.g., `#ffffff` for white)                                                              |
+| `--outline-thickness`     | int   | `0`       | Thickness of the outline around text (0 = no outline)                                                                    |
+| `--bg-color`       | str   | `#000000`       | Outline color in HEX format (e.g., `#000000` for black)                                                              |
+
 
 ---
 
