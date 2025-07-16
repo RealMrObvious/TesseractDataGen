@@ -1,8 +1,6 @@
 from PIL import Image, ImageDraw, ImageFont
 from random_word import RandomWords
-import random
-import argparse
-import os
+import random, argparse, os, time
 
 TEXT_MODES = [
     "DEFINED_LIST",
@@ -102,6 +100,7 @@ if __name__ == "__main__":
 
     r = RandomWords()
 
+    start_time = time.time()
     print(f"\nGenerating {DATA_COUNT} items using font: {TEST_FONT}, text mode: {TEXT_MODE}")
 
     if(not os.path.exists(OUTPUT_PATH)):
@@ -178,4 +177,5 @@ if __name__ == "__main__":
 
         # print(f"Generated Data #{str(i)}")
 
-    print("done")
+    elapsed_time = time.time() - start_time
+    print(f"Generated {str(DATA_COUNT)} items in: {elapsed_time} seconds")
