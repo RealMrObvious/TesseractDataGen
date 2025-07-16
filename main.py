@@ -1,0 +1,128 @@
+from PIL import Image, ImageDraw, ImageFont
+from random_word import RandomWords
+import random
+import argparse
+import os
+
+TEXT_MODES = [
+    "DEFINED_LIST",
+    "DEFINED_LIST_RANDOM",
+    "RANDOM_LOWER",
+    "RANDOM_UPPER",
+    "RANDOM_CASE"
+]
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Tesseract data generator config")
+
+    parser.add_argument("--data-count", type=int, default=1, help="Number of data items to generate")
+    parser.add_argument("--test-font", type=str, required=True, help="Path to the font file")
+    parser.add_argument("--font-size", type=int, default=45, help="Font size in points")
+    parser.add_argument("--num-words", type=int, default=1, help="Number of words generated per image")
+    parser.add_argument("--height-padding", type=float, default=5, help="Vertical padding")
+    parser.add_argument("--width-padding", type=float, default=5, help="Horizontal padding")
+    parser.add_argument("--base-x", type=int, default=0, help="Base X offset")
+    parser.add_argument("--base-y", type=int, default=0, help="Base Y offset")
+    parser.add_argument("--base-x-padding", type=float, default=2.5, help="Base X padding")
+    parser.add_argument("--base-y-padding", type=float, default=0, help="Base Y padding")
+    parser.add_argument("--output-path", type=str, default="GeneratedData", help="Output path for data")
+    parser.add_argument("--text-mode", type=str, choices=TEXT_MODES, default="RANDOM_LOWER", help="Text generation mode")
+    parser.add_argument("--input-file", type=str, help="Path to input file for predefined text modes")
+    parser.add_argument("--text-color", type=str, default="#000000", help="Text color (in hex)")
+    parser.add_argument("--bg-color", type=str, default="#ffffff",help="Image background color (in hex)")
+
+    return parser.parse_args()
+
+def get_words_from_file(filepath, count,randomWords=False):
+    with open(filepath, "r", encoding="utf-8") as file:
+        text = file.read()
+        words = text.split()
+
+        if(not randomWords):
+            return " ".join(words[:count])
+
+        if count > len(words):
+            count = len(words)
+        selected_words = random.sample(words, count)
+        return " ".join(selected_words)
+
+
+if __name__ == "__main__":
+    args = parse_args()
+
+    if args.text_mode in ["DEFINED_LIST", "DEFINED_LIST_RANDOM"] and not args.input_file:
+        print("--input-file is required when --text-mode is DEFINED_LIST or DEFINED_LIST_RANDOM")
+        exit(1)
+
+
+    DATA_COUNT = args.data_count
+    TEST_FONT = args.test_font
+    FONT_SIZE = args.font_size
+    NUM_WORDS = args.num_words
+    HEIGHT_PADING = args.height_padding
+    WIDTH_PADING = args.width_padding
+    BASE_X = args.base_x
+    BASE_Y = args.base_y
+    BASE_X_PADING = args.base_x_padding
+    BASE_Y_PADING = args.base_y_padding
+    OUTPUT_PATH = args.output_path
+    INPUT_FILE = args.input_file
+    TEXT_MODE = args.text_mode
+    BG_COLOR = args.bg_color
+    TEXT_COLOR = args.text_color
+
+    r = RandomWords()
+
+    print(f"Generating {DATA_COUNT} items using font: {TEST_FONT}, text mode: {TEXT_MODE}")
+
+    if(not os.path.exists(OUTPUT_PATH)):
+        os.mkdir(OUTPUT_PATH)
+        
+    for i in range(DATA_COUNT):
+
+        # Create a temporary image to get the size of the text
+        tmp = Image.new(mode="RGB", size=(200, 200))
+        d = ImageDraw.Draw(tmp)
+
+        try:
+            font = ImageFont.truetype(TEST_FONT, FONT_SIZE)
+        except IOError:
+            font = ImageFont.load_default()
+
+        text = r.get_random_word()
+        match(TEXT_MODE):
+        
+            case "DEFINED_LIST":
+                text = get_words_from_file(INPUT_FILE,NUM_WORDS,False)
+
+            case "DEFINED_LIST_RANDOM":
+                text = get_words_from_file(INPUT_FILE,NUM_WORDS,True)
+
+            case "RANDOM_LOWER":
+                text = text
+            
+            case "RANDOM_UPPER":
+                text = text.upper()
+
+            case "RANDOM_CASE":
+                text = list(text)
+
+                for j in range(len(text)):
+
+                    if(random.randint(0,1)):
+                        text[j] = text[j].upper()
+
+                text = "".join(text)
+
+        __,__,width,height = d.textbbox((0,0), text, font=font, align="left")
+
+        img = Image.new('RGB', (width + WIDTH_PADING, height + HEIGHT_PADING), color = BG_COLOR)
+        d = ImageDraw.Draw(img)
+
+        d.text((BASE_X + BASE_X_PADING, BASE_Y + BASE_Y_PADING), text, fill=TEXT_COLOR, font=font)
+        img.save(f"{OUTPUT_PATH}/generated_data{str(i)}.png")
+
+        with open(f"{OUTPUT_PATH}/generated_data{str(i)}.gt.txt", "w") as file:
+            file.write(text)
+
+        print(f"Generated Data #{str(i)}")
