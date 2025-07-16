@@ -31,8 +31,8 @@ python main.py --test-font <path to test font> [options]
 | `--data-count`     | int   | `1`             | Number of samples to generate                                                                                           |
 | `--num-words`      | int   | `1`             | Number of words generated per image (**Note:** increasing word count can *significantly* increases generation time)                                                                                     |
 | `--font-size`      | int   | `45`            | Font size in points                                                                                                     |
-| `--height-padding` | float | `5`             | Vertical padding around the text                                                                                        |
-| `--width-padding`  | float | `5`             | Horizontal padding around the text                                                                                      |
+| `--height-padding` | int | `5`             | Vertical padding around the text                                                                                        |
+| `--width-padding`  | int | `5`             | Horizontal padding around the text                                                                                      |
 | `--base-x`         | int   | `0`             | Base X offset for text rendering                                                                                        |
 | `--base-y`         | int   | `0`             | Base Y offset for text rendering                                                                                        |
 | `--base-x-padding` | float | `2.5`           | Additional X padding offset                                                                                             |
