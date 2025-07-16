@@ -81,9 +81,11 @@ Each generated sample will be saved to the specified `--output-path` directory a
 ## Text Modes
 
 * `DEFINED_LIST` — Uses words sequentially from a provided file.
+* `DEFINED_LIST_LINES` — Uses lines sequentially from a provided file.
 * `DEFINED_LIST_RANDOM` — Randomly selects words from a provided file.
-* `RANDOM_LOWER` — Random lowercase words (e.g., `hello world`).
-* `RANDOM_UPPER` — Random uppercase words (e.g., `HELLO WORLD`).
-* `RANDOM_CASE` — Random mixed-case words (e.g., `HEllO worlD`).
+* `DEFINED_LIST_RANDOM_LINES` — Randomly selects lines from a provided file.
+* `RANDOM_LOWER` — Randomly generated lowercase words (e.g., `hello world`).
+* `RANDOM_UPPER` — Randomly generated uppercase words (e.g., `HELLO WORLD`).
+* `RANDOM_CASE` — Randomly generated mixed-case words (e.g., `HEllO worlD`).
 
 ---

@@ -6,7 +6,9 @@ import os
 
 TEXT_MODES = [
     "DEFINED_LIST",
+    "DEFINED_LIST_LINES",
     "DEFINED_LIST_RANDOM",
+    "DEFINED_LIST_RANDOM_LINE",
     "RANDOM_LOWER",
     "RANDOM_UPPER",
     "RANDOM_CASE"
@@ -35,18 +37,42 @@ def parse_args():
 
     return parser.parse_args()
 
-def get_words_from_file(filepath, count,randomWords=False):
+import random
+
+def get_words_from_file(filepath, count, lines=False, line_index=0, randomWords=False):
     with open(filepath, "r", encoding="utf-8") as file:
-        text = file.read()
-        words = text.split()
+        if lines:
 
-        if(not randomWords):
-            return " ".join(words[:count])
+            if(randomWords):
+                line_index =  random.randint(0,len(all_lines))
 
-        if count > len(words):
-            count = len(words)
-        selected_words = random.sample(words, count)
-        return " ".join(selected_words)
+            all_lines = [line.strip() for line in file if line.strip()]
+            
+            if 0 < line_index < len(all_lines):
+
+                selected = all_lines[i]
+                return "".join(selected)
+            
+            if not randomWords:
+                return " ".join(all_lines[:count])
+            
+            if count > len(all_lines):
+                count = len(all_lines)
+            selected_lines = random.sample(all_lines, count)
+            return " ".join(selected_lines)
+
+        else:
+            text = file.read()
+            words = text.split()
+
+            if not randomWords:
+                return " ".join(words[:count])
+
+            if count > len(words):
+                count = len(words)
+            selected_words = random.sample(words, count)
+            return " ".join(selected_words)
+
 
 
 if __name__ == "__main__":
@@ -101,10 +127,16 @@ if __name__ == "__main__":
         match(TEXT_MODE):
         
             case "DEFINED_LIST":
-                text = get_words_from_file(INPUT_FILE,NUM_WORDS,False)
+                text = get_words_from_file(INPUT_FILE,NUM_WORDS)
+
+            case "DEFINED_LIST_LINES":
+                text = get_words_from_file(INPUT_FILE,NUM_WORDS,lines=True,line_index=i)
 
             case "DEFINED_LIST_RANDOM":
-                text = get_words_from_file(INPUT_FILE,NUM_WORDS,True)
+                text = get_words_from_file(INPUT_FILE,NUM_WORDS,randomWords=True)
+
+            case "DEFINED_LIST_RANDOM_LINE":
+                text = get_words_from_file(INPUT_FILE,NUM_WORDS,lines=True,randomWords=True)
 
             case "RANDOM_LOWER":
                 text = text
