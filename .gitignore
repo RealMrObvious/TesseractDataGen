@@ -182,3 +182,5 @@ cython_debug/
 /GeneratedData
 *.ttf
 *.txt
+/tessdata
+test.py

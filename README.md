@@ -18,7 +18,7 @@ I haven't tested it to a great extent so Im not sure if it'll play nicely with e
 ## Usage
 
 ```bash
-python main.py --test-font <path to test font> [options]
+python main.py --font-path <path to test font> [options]
 ````
 
 ---
@@ -27,10 +27,10 @@ python main.py --test-font <path to test font> [options]
 
 | Argument           | Type  | Default         | Description                                                                                                             |
 | ------------------ | ----- | --------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| `--test-font`      | str   | *(required)*    | Path to the `.ttf` font file                                                                                            |
-| `--data-count`     | int   | `1`             | Number of samples to generate                                                                                           |
+| `--font-path`      | str   | *(required)*    | Path to the `.ttf` font file                                                                                            |
+| `--count`     | int   | `1`             | Number of samples to generate                                                                                           |
 | `--num-words`      | int   | `1`             | Number of words generated per image (**Note:** increasing word count can *significantly* increases generation time)                                                                                     |
-| `--font-size`      | int   | `45`            | Font size in points                                                                                                     |
+| `--font-size`      | int   | `72`            | Font size in points                                                                                                     |
 | `--height-padding` | int | `5`             | Vertical padding around the text                                                                                        |
 | `--width-padding`  | int | `5`             | Horizontal padding around the text                                                                                      |
 | `--base-x`         | int   | `0`             | Base X offset for text rendering                                                                                        |
@@ -43,9 +43,10 @@ python main.py --test-font <path to test font> [options]
 | `--text-color`     | str   | `#000000`       | Text color in HEX format (e.g., `#000000` for black)                                                                    |
 | `--bg-color`       | str   | `#ffffff`       | Background color in HEX format (e.g., `#ffffff` for white)                                                              |
 | `--outline-thickness`     | int   | `0`       | Thickness of the outline around text (0 = no outline)                                                                    |
-| `--bg-color`       | str   | `#000000`       | Outline color in HEX format (e.g., `#000000` for black)                                                              |
-
-
+| `--outline-color`       | str   | `#000000`       | Outline color in HEX format (e.g., `#000000` for black) 
+| `--char-spacing`       | int   | `0`       | Extra spacing between characters in pixels                                                              |
+| `--dpi`       | int   | `300`       | DPI of the image in pixels                                                              |
+| `--gen-boxes`       | bool   | `True`       | Generate .box files for the images?                                                              |
 ---
 
 
@@ -54,7 +55,7 @@ python main.py --test-font <path to test font> [options]
 ```bash
 python main.py \
   --data-count 100 \
-  --test-font "C:/Windows/Fonts/Arial.ttf" \
+  --font-path "C:/Windows/Fonts/Arial.ttf" \
   --font-size 28 \
   --output-path "./output" \
   --text-mode RANDOM_UPPER \
@@ -69,7 +70,7 @@ python main.py \
 If `--text-mode` is set to either `DEFINED_LIST` or `DEFINED_LIST_RANDOM`, you **must** provide an `--input-file` containing words (one per line or space-separated).
 
 ```bash
-python main.py --text-mode DEFINED_LIST --input-file wordlist.txt ...
+python main.py --font-path font.tff --text-mode DEFINED_LIST --input-file wordlist.txt ...
 ```
 ---
 ## Output
