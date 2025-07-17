@@ -1,6 +1,6 @@
 from PIL import Image, ImageDraw, ImageFont
 from random_word import RandomWords
-import random, argparse, os, time, subprocess
+import random, argparse, os, time
 
 TEXT_MODES = [
     "DEFINED_LIST",
