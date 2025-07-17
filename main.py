@@ -147,7 +147,7 @@ if __name__ == "__main__":
         
     for i in range(COUNT):
 
-        NUM_WORDS = random.randint(1,20)
+        # NUM_WORDS = random.randint(1,20)
 
         # Create a temporary image to get the size of the text
         tmp = Image.new(mode="RGB", size=(200, 200))
